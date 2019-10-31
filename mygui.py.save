@@ -11,8 +11,8 @@ class RPI_GUI:
     global win, CoreTempVar
     def __init__(self, win):
         self.win = win
-        #win_w, win_h = 640, 360
-        #self.win.geometry('{}x{}+0+0'.format(win_w, win_h)) #win_w, win_h, origin_x, origin_y
+        win_w, win_h = 640, 360
+        self.win.geometry('{}x{}+0+0'.format(win_w, win_h)) #win_w, win_h, origin_x, origin_y
         self.win.attributes('-fullscreen', True)
         self.win.title('guiDANCE --Powered by tkinter v8.6')
         self.font = Font(family='Helvetica', size=12, weight='bold')
@@ -26,12 +26,11 @@ class RPI_GUI:
         self.win.grid_rowconfigure(2, weight=1)
         self.win.grid_rowconfigure(3, weight=1)
         self.win.grid_rowconfigure(4, weight=1)
-        print('W:{}, H:{}'.format(win.winfo_screenwidth(), win.winfo_screenheight()))
 
         self.title = Label(self.win, 
-                           text='guiDANCE (Tkinter v8.6)').grid(row=0, columnspan=4, sticky='nse')
+                           text='guiDANCE (Tkinter v8.6)').grid(row=0, columnspan=3, sticky='nse')
         self.datetime = Label(self.win,
-                              text=str(datetime.datetime.now()).split('.')[0]).grid(row=0, column=4, columnspan=1, sticky='nse')
+                              text=str(datetime.datetime.now()).split('.')[0]).grid(row=0, column=3, columnspan=2, sticky='nse')
         
         # temp code exit button used during testing
 #        self.exit = Button(self.win, 
@@ -79,12 +78,12 @@ class RPI_GUI:
         # display live monitor values
         self.CoreTemp = Label(self.win,
 #                              text='{0:.3f}'.format(np.random.randn(1).item()),
-                              text=os.popen('vcgencmd measure_temp').readline().replace('temp=','')[1].strip('\n'),
+                              text=os.popen('vcgencmd measure_temp').readline().replace('temp=',''),
                               borderwidth=2,
                               font=self.font).grid(row=2, column=3, sticky='nsew')
         self.CPUusage = Label(self.win,
 #                              text='{0:.3f}'.format(np.random.randn(1).item()),
-                              text=str(os.popen("top -n1 | awk '/Cpu\(s\):/ {print $2}'").readline().strip('\n')+' %'),
+                              text=str(os.popen("top -n1 | awk '/Cpu\(s\):/ {print $2}'").readline().strip('\n')),
                               borderwidth=2,
                               font=self.font).grid(row=3, column=3, sticky='nsew')
         self.Diskusage = Label(self.win,
@@ -103,15 +102,16 @@ class RPI_GUI:
 
     def updateLiveData(self):
         self.datetime = Label(self.win,
-                              text=str(datetime.datetime.now()
-                                       ).split('.')[0]).grid(row=0, column=4, columnspan=1, sticky='nse')
+                              text=str(datetime.datetime.now(),
+                                      ).split('.')[0]).grid(row=0, column=3, columnspan=2, sticky='nse')
         self.CoreTemp = Label(self.win,
 #                              text='{0:.3f}'.format(np.random.randn(1).item()),
-                              text=os.popen('vcgencmd measure_temp').readline().replace('temp=','').strip('\n'),
+                              text=os.popen('vcgencmd measure_temp').readline().replace('temp=','').replace('\n',''),
+                              borderwidth=2,
                               font=self.font).grid(row=2, column=3, sticky='nsew')
         self.CPUusage = Label(self.win,
 #                              text='{0:.3f}'.format(np.random.randn(1).item()),
-                              text=str(os.popen("top -n1 | awk '/Cpu\(s\):/ {print $2}'").readline().strip('\n'))+' %',
+                              text=str(os.popen("top -n1 | awk '/Cpu\(s\):/ {print $2}'").readline().strip('\n')),
                               borderwidth=2,
 #                              relief='sunken',
                               font=self.font).grid(row=3, column=3, sticky='nsew')
